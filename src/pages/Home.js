@@ -5,6 +5,7 @@ import useDebounce from "../hooks/useDebounce";
 function Home() {
   const [tracks, setTracks] = useState();
   const [query, setQuery] = useState("Nyongwa");
+  const { REACT_APP_PROXY_URL, REACT_APP_API_URL } = process.env;
 
   const debouncedSearchTerm = useDebounce(query, 500);
 
@@ -15,7 +16,7 @@ function Home() {
 
   const fetchData = async () => {
     const response = await fetch(
-      `https://cors-anywhere.herokuapp.com/https://api.deezer.com/search/track/?q=${debouncedSearchTerm}`
+      `${REACT_APP_PROXY_URL}/${REACT_APP_API_URL}/search/track/?q=${debouncedSearchTerm}`
     );
 
     const { data } = await response.json();
