@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
-import "./App.css";
 import Artist from "./pages/Artist";
 
 function App() {

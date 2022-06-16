@@ -31,7 +31,7 @@ function Home() {
   return (
     <div className="w-full">
       <header className="flex justify-center bg-gray-200 border-b border-gray-300  py-4">
-        <div className="flex space-x-8 w-full md:w-8/12 items-center">
+        <div className="flex space-x-8 w-full md:w-8/12 lg:w-6/12 items-center">
           <div className="h-8 text-white bg-gray-700 w-16 flex justify-center items-center font-bold">
             LOGO
           </div>
@@ -61,8 +61,12 @@ function Home() {
           </div>
         </div>
       </header>
+
       <div className="flex justify-center">
-        <div className="w-full md:w-8/12">
+        <div className="w-full md:w-8/12 lg:w-6/12">
+          <h3 className="text-left py-4 px-4">
+            Search results for : <span className="font-bold">"{query}"</span>
+          </h3>
           <div className="flex flex-wrap">
             {tracks?.map((track) => {
               return (
