@@ -24,3 +24,5 @@ yarn-error.log*
 
 # junit
 junit.xml
+.idea/
+.vscode/
