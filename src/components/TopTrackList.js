@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import TopTrackListItem from "./TopTrackListItem";
 
 function TopTrackList({ artist }) {
   const [topTracks, setTopTracks] = useState();
@@ -19,14 +20,16 @@ function TopTrackList({ artist }) {
   return (
     <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
       <div className="w-full">
-        <h3 className="font-title">Top Tracks</h3>
+        <h3 className="font-bold text-2xl">Top Tracks</h3>
         {}
         <ul className="w-full divide-y-2 divide-gray-100">
           {topTracks?.data.map((track, index) => {
             return (
-              <li key={track.id}>
-                {index + 1}. {track?.title}
-              </li>
+              <TopTrackListItem
+                track={track}
+                key={track.id}
+                trackNumber={index + 1}
+              />
             );
           })}
         </ul>

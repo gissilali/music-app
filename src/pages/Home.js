@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import TrackCard from "../components/TrackCard";
 import useDebounce from "../hooks/useDebounce";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
 
 function Home() {
   const [tracks, setTracks] = useState();
   const [query, setQuery] = useState("Nyongwa");
   const { REACT_APP_PROXY_URL, REACT_APP_API_URL } = process.env;
 
-  const debouncedSearchTerm = useDebounce(query, 500);
+  const debouncedSearchTerm = useDebounce(query, 300);
 
   useEffect(() => {
     console.log("Hello");
@@ -22,10 +29,6 @@ function Home() {
     const { data } = await response.json();
     console.log({ data });
     setTracks(data);
-  };
-
-  const handleSearch = (value) => {
-    setQuery(value);
   };
 
   return (
@@ -54,9 +57,7 @@ function Home() {
               value={query}
               type="text"
               className="outline-none py-4 px-4 bg-transparent"
-              onChange={(e) => {
-                handleSearch(e?.target?.value);
-              }}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </div>
         </div>
@@ -69,30 +70,7 @@ function Home() {
           </h3>
           <div className="flex flex-wrap">
             {tracks?.map((track) => {
-              return (
-                <div key={track.id} className="p-4 md:w-1/3">
-                  <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
-                    <img
-                      className="lg:h-48 md:h-36 w-full object-cover object-center"
-                      src={track?.album?.cover_medium}
-                      alt="blog"
-                    />
-                    <div className="p-6">
-                      <h1 className="title-font text-lg font-medium text-gray-900 mb-3">
-                        {track?.title}
-                      </h1>
-                      <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">
-                        <Link to={`/artist/${track?.artist?.id}`}>
-                          {track?.artist?.name}
-                        </Link>
-                      </h2>
-                      <p className="leading-relaxed mb-3">
-                        {track?.album?.title}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
+              return <TrackCard track={track} key={track.id} />;
             })}
           </div>
         </div>
