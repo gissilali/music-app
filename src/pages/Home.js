@@ -24,8 +24,15 @@ function Home() {
     <div className="w-full">
       <header className="flex justify-center bg-gray-200 border-b border-gray-300  py-4">
         <div className="flex space-x-8 w-full md:w-8/12 lg:w-6/12 items-center">
-          <div className="h-8 text-white bg-gray-700 w-16 flex justify-center items-center font-bold">
-            LOGO
+          <div className="h-8 text-white bg-gray-700 w-8 flex justify-center items-center font-bold">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
+            </svg>
           </div>
           <div className="flex items-center border-l-2 px-4">
             <svg
