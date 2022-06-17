@@ -1,29 +1,31 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import LoadingState from "./LoadingState";
 import TopTrackListItem from "./TopTrackListItem";
 
 function TopTrackList({ artist }) {
-  const [topTracks, setTopTracks] = useState();
   const { REACT_APP_PROXY_URL, REACT_APP_API_URL } = process.env;
-  const fetchTopTracks = async () => {
-    const response = await fetch(
+  console.log({ artist });
+  const fetchTopTracks = () =>
+    fetch(
       `${REACT_APP_PROXY_URL}/${REACT_APP_API_URL}/artist/${artist.id}/top?limit=5`
-    );
-    const tracksData = await response.json();
-    console.log({
-      tracksData,
-    });
-    setTopTracks(tracksData);
-  };
-  useEffect(() => {
-    fetchTopTracks();
-  }, []);
+    ).then((response) => response.json());
+
+  const {
+    isLoading,
+    isError,
+    data: topTracks,
+    error,
+  } = useQuery(["fetch-top-tracks"], fetchTopTracks);
+  console.log({ topTracks });
   return (
-    <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-      <div className="w-full">
-        <h3 className="font-bold text-2xl">Top Tracks</h3>
-        {}
-        <ul className="w-full divide-y-2 divide-gray-100">
-          {topTracks?.data.map((track, index) => {
+    <div className="w-full">
+      <h3 className="font-bold text-2xl">Top Tracks</h3>
+      {}
+      <ul className="w-full divide-y-2 divide-gray-100">
+        {isLoading ? (
+          <LoadingState />
+        ) : (
+          topTracks?.data.map((track, index) => {
             return (
               <TopTrackListItem
                 track={track}
@@ -31,9 +33,9 @@ function TopTrackList({ artist }) {
                 trackNumber={index + 1}
               />
             );
-          })}
-        </ul>
-      </div>
+          })
+        )}
+      </ul>
     </div>
   );
 }

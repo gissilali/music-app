@@ -1,35 +1,24 @@
 import { useState, useEffect } from "react";
 import TrackCard from "../components/TrackCard";
 import useDebounce from "../hooks/useDebounce";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "react-query";
+import GridEmptyState from "../components/GridEmptyState";
+import LoadingState from "../components/LoadingState";
+import { useQuery } from "react-query";
 
 function Home() {
-  const [tracks, setTracks] = useState();
-  const [query, setQuery] = useState("Nyongwa");
+  const [query, setQuery] = useState("");
   const { REACT_APP_PROXY_URL, REACT_APP_API_URL } = process.env;
 
   const debouncedSearchTerm = useDebounce(query, 300);
-
-  useEffect(() => {
-    console.log("Hello");
-    fetchData();
-  }, [query]);
-
-  const fetchData = async () => {
-    const response = await fetch(
+  const searchTracks = () => {
+    return fetch(
       `${REACT_APP_PROXY_URL}/${REACT_APP_API_URL}/search/track/?q=${debouncedSearchTerm}`
-    );
-
-    const { data } = await response.json();
-    console.log({ data });
-    setTracks(data);
+    ).then((response) => response.json());
   };
+  const { isLoading, isError, data, error } = useQuery(
+    ["search-tracks", debouncedSearchTerm],
+    searchTracks
+  );
 
   return (
     <div className="w-full">
@@ -65,13 +54,27 @@ function Home() {
 
       <div className="flex justify-center">
         <div className="w-full md:w-8/12 lg:w-6/12">
-          <h3 className="text-left py-4 px-4">
-            Search results for : <span className="font-bold">"{query}"</span>
-          </h3>
+          {debouncedSearchTerm ? (
+            <h3 className="text-left py-4 px-4">
+              Search results for : <span className="font-bold">"{query}"</span>
+            </h3>
+          ) : null}
           <div className="flex flex-wrap">
-            {tracks?.map((track) => {
-              return <TrackCard track={track} key={track.id} />;
-            })}
+            {isLoading ? (
+              <LoadingState />
+            ) : data && debouncedSearchTerm.length > 0 ? (
+              data?.data?.map((track) => (
+                <TrackCard track={track} key={track.id} />
+              ))
+            ) : (
+              <GridEmptyState
+                message={
+                  debouncedSearchTerm
+                    ? `no results for ${debouncedSearchTerm}`
+                    : "type in the search field to search..."
+                }
+              />
+            )}
           </div>
         </div>
       </div>
