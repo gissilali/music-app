@@ -45,6 +45,7 @@ function Home() {
             <input
               value={query}
               type="text"
+              placeholder="Type here to search...."
               className="outline-none py-4 px-4 bg-transparent"
               onChange={(e) => setQuery(e.target.value)}
             />
